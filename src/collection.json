@@ -19,6 +19,7 @@
     },
     "routing": {
       "description": "A blank schematic.",
+      "aliases": ["rou"],
       "factory": "./routing/index#routing",
       "schema": "./routing/schema.json"
     }
