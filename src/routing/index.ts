@@ -5,6 +5,7 @@ import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 // per file.
 export function routing(_options: any): Rule {
   return (tree: Tree, _context: SchematicContext) => {
+    tree.create('AJLG.txt', 'this is a content');
     return tree;
   };
 }
