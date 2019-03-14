@@ -1,0 +1,25 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "schematics": {
+      "description": "A blank schematic.",
+      "factory": "./schematics/index#schematics"
+    },
+    "ssr": {
+      "description": "A blank schematic.",
+      "factory": "./ssr/index#ssr"
+    },
+    "page": {
+      "description": "A blank schematic.",
+      "factory": "./page/index#page"
+    },
+    "route": {
+      "description": "A blank schematic.",
+      "factory": "./route/index#route"
+    },
+    "routing": {
+      "description": "A blank schematic.",
+      "factory": "./routing/index#routing"
+    }
+  }
+}
