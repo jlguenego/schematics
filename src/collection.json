@@ -19,7 +19,8 @@
     },
     "routing": {
       "description": "A blank schematic.",
-      "factory": "./routing/index#routing"
+      "factory": "./routing/index#routing",
+      "schema": "./routing/schema.json"
     }
   }
 }
