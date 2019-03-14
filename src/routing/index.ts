@@ -22,7 +22,7 @@ export function routing(options: any): Rule {
     console.log('movePath', movePath, options);
     const modulePath = normalize(movePath + "/" + strings.dasherize(options.name) + '.module.ts');
     if (!tree.exists(modulePath)) {
-      rules.push(externalSchematic('@schematics/angular', 'component', options));
+      rules.push(externalSchematic('@schematics/angular', 'module', options));
     }
 
     const routingModuleName = normalize(options.name + '-routing-module');

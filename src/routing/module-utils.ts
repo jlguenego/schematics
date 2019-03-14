@@ -27,7 +27,9 @@ export function addImportToNgModule(options: MyOptions): Rule {
 
         const modulePath = options.modulePath;
         const importedModulePath = options.importedModulePath;
+        console.log('about to read source file');
         const source = readIntoSourceFile(host, modulePath);
+        console.log('source file read done.');
         const relativePath = buildRelativePath(modulePath, importedModulePath);
 
         const changes = addImportToModule(
