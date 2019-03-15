@@ -6,7 +6,7 @@ import { WorkspaceProject, ProjectType } from '@schematics/angular/utility/works
 
 export function setupOptions(host: Tree, options: any): Tree {
     if (options.name === undefined) {
-        throw new SchematicsException(`Looks like the schema.json is not right...`);
+        throw new SchematicsException(`Looks like the schema.json is not right because the first arg should be the name.`);
     }
     const workspace = getWorkspace(host);
     if (!options.project) {

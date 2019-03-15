@@ -24,7 +24,6 @@ export function routing(options: any): Rule {
 
     const routingModuleName = normalize(options.name + '-routing-module');
     const routingModulePath = normalize(movePath + '/' + routingModuleName);
-    console.log('routingModulePath', routingModulePath);
 
     const templateSource = apply(url('./files'), [
       options.spec ? noop() : filter(path => !path.endsWith('.spec.ts')),
