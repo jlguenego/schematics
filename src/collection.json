@@ -11,7 +11,8 @@
     },
     "route": {
       "description": "A blank schematic.",
-      "factory": "./route/index#route"
+      "factory": "./route/index#route",
+      "schema": "./route/schema.json"
     },
     "routing": {
       "description": "A blank schematic.",
