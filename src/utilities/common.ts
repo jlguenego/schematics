@@ -2,8 +2,8 @@ import { Tree } from "@angular-devkit/schematics/src/tree/interface";
 import { SchematicsException } from "@angular-devkit/schematics";
 import * as ts from 'typescript';
 
-export function readIntoSourceFile(host: Tree, modulePath: string): ts.SourceFile {
-    const text = host.read(modulePath);
+export function readIntoSourceFile(tree: Tree, modulePath: string): ts.SourceFile {
+    const text = tree.read(modulePath);
     if (text === null) {
         throw new SchematicsException(`File ${modulePath} does not exist.`);
     }
