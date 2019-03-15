@@ -5,7 +5,7 @@ import * as ts from 'typescript';
 import { normalize, strings } from "@angular-devkit/core";
 import { findNode } from "@schematics/angular/utility/ast-utils";
 
-function getUpdateRoutesChanges(source: ts.SourceFile): Change[] {
+function getUpdateRoutesChanges(source: ts.SourceFile, options: any): Change[] {
     const node = findNode(source, ts.SyntaxKind.Identifier, 'routes');
     if (node === null) {
         throw new Error('error');
@@ -20,7 +20,13 @@ function getUpdateRoutesChanges(source: ts.SourceFile): Change[] {
     }
     const array = initializer.getChildren();
     const lastChild = array[1];
-    return [new InsertChange(source.text, lastChild.end, ',{path: "hello"}')];
+    let separator = ',';
+    if ((<ts.ArrayLiteralExpression>initializer).elements.length === 0) {
+        separator = '';
+    }
+    const path = options.url || 'TBD';
+    const component = 'HomeTBDComponent';
+    return [new InsertChange(source.text, lastChild.end, `${separator}{path: "${path}", component: ${component}}`)];
 }
 
 export function updateRoutes(options: any): Rule {
@@ -33,7 +39,7 @@ export function updateRoutes(options: any): Rule {
         const routingModulePath = movePath + '-routing.module.ts';
         const source = readIntoSourceFile(tree, routingModulePath);
 
-        const changes = getUpdateRoutesChanges(source);
+        const changes = getUpdateRoutesChanges(source, options);
         const recorder = tree.beginUpdate(routingModulePath);
 
         for (let change of changes) {

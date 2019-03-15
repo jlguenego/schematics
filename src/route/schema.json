@@ -5,6 +5,10 @@
     "type": "object",
     "description": "Create a new component and add it as a route in a routing module",
     "properties": {
+      "url": {
+        "type": "string",
+        "description": "The url (path) to connect the route",
+      },
       "path": {
         "type": "string",
         "format": "path",
