@@ -2,14 +2,6 @@ import * as ts from 'typescript';
 import * as fs from 'fs';
 import { findNode } from '@schematics/angular/utility/ast-utils';
 
-// function getName(num: any) {
-//     for (let p in ts.SyntaxKind) {
-//         if (p == num) {
-//             console.log('name', p, ts.SyntaxKind[p]);
-//         }
-//     }
-// }
-
 function insert(source: string, content: string, start: number, end: number) {
     return source.substring(0, start) + content + source.substring(end);
 }

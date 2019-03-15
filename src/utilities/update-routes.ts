@@ -32,7 +32,6 @@ function getUpdateRoutesChanges(source: ts.SourceFile, options: any): Change[] {
 
 export function updateRoutes(options: any): Rule {
     return (tree: Tree) => {
-        console.log('options', options);
         const movePath = (options.flat) ?
             normalize(options.path) :
             normalize(options.path + '/' + strings.dasherize(options.name));

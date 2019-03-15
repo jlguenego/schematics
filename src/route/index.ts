@@ -9,8 +9,6 @@ const MODULE_EXT = '.module.ts';
 
 function isFlat(path: Path, name: string) {
   const dir = <string>basename(path);
-  console.log('dir', dir);
-  console.log('name', name);
   return dir !== name || dir === 'app';
 }
 
@@ -30,7 +28,6 @@ export function route(options: any): Rule {
     rules.push(externalSchematic('@schematics/angular', 'component', options));
 
     const modulePath = findModuleFromOptions(tree, options);
-    console.log('modulePath', modulePath);
 
     if (!modulePath) {
       throw new SchematicsException(`module to add the route not found.`);
@@ -43,7 +40,6 @@ export function route(options: any): Rule {
       name,
       flat: isFlat(moduleParsedPath.path, name),
     };
-    console.log('routingOptions.name', routingOptions.name);
 
     // call tye schematic routing
     rules.push(schematic('routing', routingOptions));
