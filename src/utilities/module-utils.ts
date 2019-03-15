@@ -1,19 +1,10 @@
-import { Rule, Tree, SchematicsException } from "@angular-devkit/schematics";
+import { Rule, Tree } from "@angular-devkit/schematics";
 import { addImportToModule } from '@schematics/angular/utility/ast-utils';
-import * as ts from 'typescript';
 import { buildRelativePath } from "@schematics/angular/utility/find-module";
 import { InsertChange } from "@schematics/angular/utility/change";
 import { strings } from "@angular-devkit/core";
 
-function readIntoSourceFile(host: Tree, modulePath: string): ts.SourceFile {
-    const text = host.read(modulePath);
-    if (text === null) {
-        throw new SchematicsException(`File ${modulePath} does not exist.`);
-    }
-    const sourceText = text.toString('utf-8');
-
-    return ts.createSourceFile(modulePath, sourceText, ts.ScriptTarget.Latest, true);
-}
+import { readIntoSourceFile } from "./common";
 
 export interface MyOptions {
     modulePath: string; // path of the module

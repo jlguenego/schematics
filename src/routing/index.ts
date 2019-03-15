@@ -22,7 +22,7 @@ export function routing(options: any): Rule {
       rules.push(externalSchematic('@schematics/angular', 'module', options));
     }
 
-    const routingModuleName = normalize(options.name + '-routing-module');
+    const routingModuleName = normalize(options.name + '-routing.module');
     const routingModulePath = normalize(movePath + '/' + routingModuleName);
 
     const templateSource = apply(url('./files'), [
