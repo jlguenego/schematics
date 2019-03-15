@@ -53,7 +53,8 @@ export function route(options: any): Rule {
       ...options,
       ...routingOptions,
       path: moduleParsedPath.path,
-
+      componentName: options.name,
+      componentPath: options.path,
     };
     rules.push(updateRoutes(updateRoutesOptions));
 

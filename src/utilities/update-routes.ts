@@ -3,7 +3,8 @@ import { readIntoSourceFile } from "./common";
 import { InsertChange, Change } from "@schematics/angular/utility/change";
 import * as ts from 'typescript';
 import { normalize, strings } from "@angular-devkit/core";
-import { findNode } from "@schematics/angular/utility/ast-utils";
+import { findNode, addImportToModule } from "@schematics/angular/utility/ast-utils";
+import { buildRelativePath } from "@schematics/angular/utility/find-module";
 
 function getUpdateRoutesChanges(source: ts.SourceFile, options: any): Change[] {
     const node = findNode(source, ts.SyntaxKind.Identifier, 'routes');
@@ -25,12 +26,11 @@ function getUpdateRoutesChanges(source: ts.SourceFile, options: any): Change[] {
         separator = '';
     }
     const path = options.url || 'TBD';
-    const component = 'HomeTBDComponent';
+    const component = strings.classify(options.componentName) + 'Component';
     return [new InsertChange(source.text, lastChild.end, `${separator}{path: "${path}", component: ${component}}`)];
 }
 
 export function updateRoutes(options: any): Rule {
-
     return (tree: Tree) => {
         console.log('options', options);
         const movePath = (options.flat) ?
@@ -48,6 +48,24 @@ export function updateRoutes(options: any): Rule {
             }
         }
         tree.commitUpdate(recorder);
+
+        const source2 = readIntoSourceFile(tree, routingModulePath);
+        const component = strings.classify(options.componentName) + 'Component';
+        const componentPath = normalize(options.componentPath + '/' + options.componentName + '/' + options.componentName + '.component');
+        const relativePath = buildRelativePath(routingModulePath, componentPath);
+        const changes2 = addImportToModule(
+            source2,
+            routingModulePath,
+            component,
+            relativePath);
+        const recorder2 = tree.beginUpdate(routingModulePath);
+
+        for (let change of changes2) {
+            if (change instanceof InsertChange) {
+                recorder2.insertLeft(change.pos, change.toAdd);
+            }
+        }
+        tree.commitUpdate(recorder2);
         return tree;
     };
 }
