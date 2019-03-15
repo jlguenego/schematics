@@ -23,6 +23,7 @@ export function routing(options: any): Rule {
     }
 
     const routingModuleName = normalize(options.name + '-routing.module');
+    const routingModuleClassName = strings.classify(normalize(options.name + '-routing-module'));
     const routingModulePath = normalize(movePath + '/' + routingModuleName);
 
     const templateSource = apply(url('./files'), [
@@ -31,6 +32,7 @@ export function routing(options: any): Rule {
         ...strings,
         ...options,
         routingModuleName,
+        routingModuleClassName,
       }),
       move(movePath),
     ]);
@@ -42,7 +44,7 @@ export function routing(options: any): Rule {
     rules.push(addImportToNgModule({
       modulePath: modulePath,
       importedModulePath: routingModulePath,
-      importedModuleName: routingModuleName
+      importedModuleName: routingModuleClassName
     }));
     return chain(rules)(tree, context);
   };

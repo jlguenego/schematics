@@ -6,10 +6,21 @@ import { normalize, strings } from "@angular-devkit/core";
 import { findNode } from "@schematics/angular/utility/ast-utils";
 
 function getUpdateRoutesChanges(source: ts.SourceFile): Change[] {
-    console.log('source', source);
-    const routeIdentifier: ts.Identifier = <ts.Identifier> findNode(source, ts.SyntaxKind.Identifier, 'routes');
-    console.log('routeIdentifier', routeIdentifier);
-    return [];
+    const node = findNode(source, ts.SyntaxKind.Identifier, 'routes');
+    if (node === null) {
+        throw new Error('error');
+    }
+    const parent = node.parent;
+    if (parent.kind !== ts.SyntaxKind.VariableDeclaration) {
+        throw new Error('routes is not a variable declaration');
+    }
+    const initializer = (<ts.VariableDeclaration>parent).initializer;
+    if (initializer === undefined || initializer.kind !== ts.SyntaxKind.ArrayLiteralExpression) {
+        throw new Error();
+    }
+    const array = initializer.getChildren();
+    const lastChild = array[1];
+    return [new InsertChange(source.text, lastChild.end, ',{path: "hello"}')];
 }
 
 export function updateRoutes(options: any): Rule {
