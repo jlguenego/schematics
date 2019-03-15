@@ -22,14 +22,11 @@ export interface MyOptions {
 }
 
 export function addImportToNgModule(options: MyOptions): Rule {
-    console.log('add import rule');
     return (host: Tree) => {
 
         const modulePath = options.modulePath;
         const importedModulePath = options.importedModulePath;
-        console.log('about to read source file');
         const source = readIntoSourceFile(host, modulePath);
-        console.log('source file read done.');
         const relativePath = buildRelativePath(modulePath, importedModulePath);
 
         const changes = addImportToModule(
@@ -38,11 +35,9 @@ export function addImportToNgModule(options: MyOptions): Rule {
             strings.classify(options.importedModuleName),
             relativePath);
         const recorder = host.beginUpdate(modulePath);
-        console.log('recorder');
 
         for (let change of changes) {
             if (change instanceof InsertChange) {
-                console.log('insert');
                 recorder.insertLeft(change.pos, change.toAdd);
             }
         }

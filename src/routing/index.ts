@@ -1,8 +1,7 @@
 import { Rule, SchematicContext, Tree, apply, noop, filter, move, mergeWith, MergeStrategy, url, template, externalSchematic, chain } from '@angular-devkit/schematics';
-import { setupOptions } from './setupOptions';
+import { setupOptions } from '../utilities/setupOptions';
 import { normalize, strings } from '@angular-devkit/core';
-import { addImportToNgModule } from './module-utils';
-
+import { addImportToNgModule } from '../utilities/module-utils';
 
 // You don't have to export the function as default. You can also have more than one rule factory
 // per file.
@@ -17,9 +16,7 @@ export function routing(options: any): Rule {
 
     const rules = [];
 
-
     // if module with same name does not exist then create it.
-    console.log('movePath', movePath, options);
     const modulePath = normalize(movePath + "/" + strings.dasherize(options.name) + '.module.ts');
     if (!tree.exists(modulePath)) {
       rules.push(externalSchematic('@schematics/angular', 'module', options));
