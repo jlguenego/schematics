@@ -41,15 +41,13 @@ export interface UpdateRoutesOptions {
 
 export function updateRoutes(options: any): Rule {
     return (tree: Tree) => {
-        const path = (options.flat) ?
+        const path = (options.flat && options.name !== 'app') ?
             normalize(options.path) :
             normalize(options.path + '/' + strings.dasherize(options.name));
         const routingModulePath = path + '-routing.module.ts';
         const source = readIntoSourceFile(tree, routingModulePath);
-
         const changes = getUpdateRoutesChanges(source, options);
         const recorder = tree.beginUpdate(routingModulePath);
-
         for (let change of changes) {
             if (change instanceof InsertChange) {
                 recorder.insertLeft(change.pos, change.toAdd);
@@ -62,11 +60,10 @@ export function updateRoutes(options: any): Rule {
 
 export function insertImportToModule(options: UpdateRoutesOptions): Rule {
     return (tree: Tree) => {
-        const path = (options.flat) ?
+        const path = (options.flat && options.name !== 'app') ?
             normalize(options.path) :
             normalize(options.path + '/' + strings.dasherize(options.name));
         const routingModulePath = path + '-routing.module.ts';
-
         const source = readIntoSourceFile(tree, routingModulePath);
         const component = strings.classify(options.componentName) + 'Component';
         const componentPath = normalize(options.componentPath + '/' + options.componentName + '/' + options.componentName + '.component');

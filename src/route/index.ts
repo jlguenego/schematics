@@ -40,9 +40,11 @@ export function route(options: any): Rule {
       name,
       flat: isFlat(moduleParsedPath.path, name),
     };
-
-    // call tye schematic routing
-    rules.push(schematic('routing', routingOptions));
+    // call the schematic routing only if the routing module does not exist.
+    const routingModulePath = modulePath.replace('.module.ts', '-routing.module.ts');
+    if (!tree.exists(routingModulePath)) {
+      rules.push(schematic('routing', routingOptions));
+    }
 
     // adding in the route variable
     const updateRoutesOptions: UpdateRoutesOptions = {
