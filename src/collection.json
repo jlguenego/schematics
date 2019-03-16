@@ -1,5 +1,8 @@
 {
   "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "extends": [
+    "@schematics/angular"
+  ],
   "schematics": {
     "ssr": {
       "description": "A blank schematic.",
@@ -17,7 +20,9 @@
     },
     "routing": {
       "description": "A blank schematic.",
-      "aliases": ["rou"],
+      "aliases": [
+        "rou"
+      ],
       "factory": "./routing/index#routing",
       "schema": "./routing/schema.json"
     }
