@@ -25,7 +25,7 @@ function getUpdateRoutesChanges(source: ts.SourceFile, options: UpdateRoutesOpti
     if ((<ts.ArrayLiteralExpression>initializer).elements.length === 0) {
         separator = '';
     }
-    const path = options.url || 'TBD';
+    const path = (options.url === undefined) || '';
     const component = strings.classify(options.componentName) + 'Component';
     return [new InsertChange(source.text, lastChild.end, `${separator}{path: "${path}", component: ${component}}`)];
 }
