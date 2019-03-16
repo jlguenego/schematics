@@ -6,7 +6,7 @@ import { normalize, strings } from "@angular-devkit/core";
 import { findNode, addImportToModule } from "@schematics/angular/utility/ast-utils";
 import { buildRelativePath } from "@schematics/angular/utility/find-module";
 
-function getUpdateRoutesChanges(source: ts.SourceFile, options: any): Change[] {
+function getUpdateRoutesChanges(source: ts.SourceFile, options: UpdateRoutesOptions): Change[] {
     const node = findNode(source, ts.SyntaxKind.Identifier, 'routes');
     if (node === null) {
         throw new Error('error');
@@ -30,12 +30,21 @@ function getUpdateRoutesChanges(source: ts.SourceFile, options: any): Change[] {
     return [new InsertChange(source.text, lastChild.end, `${separator}{path: "${path}", component: ${component}}`)];
 }
 
+export interface UpdateRoutesOptions {
+    flat?: boolean;
+    path: string; // path of the routing module
+    name: string; // name of the module (and routing module)
+    componentName: string; // name of the component
+    componentPath: string; // path of the component
+    url: string; // url of the route component (route.path)
+}
+
 export function updateRoutes(options: any): Rule {
     return (tree: Tree) => {
-        const movePath = (options.flat) ?
+        const path = (options.flat) ?
             normalize(options.path) :
             normalize(options.path + '/' + strings.dasherize(options.name));
-        const routingModulePath = movePath + '-routing.module.ts';
+        const routingModulePath = path + '-routing.module.ts';
         const source = readIntoSourceFile(tree, routingModulePath);
 
         const changes = getUpdateRoutesChanges(source, options);
@@ -47,24 +56,34 @@ export function updateRoutes(options: any): Rule {
             }
         }
         tree.commitUpdate(recorder);
+        return tree;
+    };
+}
 
-        const source2 = readIntoSourceFile(tree, routingModulePath);
+export function insertImportToModule(options: UpdateRoutesOptions): Rule {
+    return (tree: Tree) => {
+        const path = (options.flat) ?
+            normalize(options.path) :
+            normalize(options.path + '/' + strings.dasherize(options.name));
+        const routingModulePath = path + '-routing.module.ts';
+
+        const source = readIntoSourceFile(tree, routingModulePath);
         const component = strings.classify(options.componentName) + 'Component';
         const componentPath = normalize(options.componentPath + '/' + options.componentName + '/' + options.componentName + '.component');
         const relativePath = buildRelativePath(routingModulePath, componentPath);
-        const changes2 = addImportToModule(
-            source2,
+        const changes = addImportToModule(
+            source,
             routingModulePath,
             component,
             relativePath);
-        const recorder2 = tree.beginUpdate(routingModulePath);
+        const recorder = tree.beginUpdate(routingModulePath);
 
-        for (let change of changes2) {
+        for (let change of changes) {
             if (change instanceof InsertChange) {
-                recorder2.insertLeft(change.pos, change.toAdd);
+                recorder.insertLeft(change.pos, change.toAdd);
             }
         }
-        tree.commitUpdate(recorder2);
+        tree.commitUpdate(recorder);
         return tree;
     };
 }

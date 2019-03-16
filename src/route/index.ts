@@ -3,7 +3,7 @@ import { setupOptions } from '../utilities/setupOptions';
 import { findModuleFromOptions } from '@schematics/angular/utility/find-module';
 import { parseName } from '@schematics/angular/utility/parse-name';
 import { basename, Path } from '@angular-devkit/core';
-import { updateRoutes } from '../utilities/update-routes';
+import { updateRoutes, UpdateRoutesOptions, insertImportToModule } from '../utilities/update-routes';
 
 const MODULE_EXT = '.module.ts';
 
@@ -45,7 +45,7 @@ export function route(options: any): Rule {
     rules.push(schematic('routing', routingOptions));
 
     // adding in the route variable
-    const updateRoutesOptions = {
+    const updateRoutesOptions: UpdateRoutesOptions = {
       ...options,
       ...routingOptions,
       path: moduleParsedPath.path,
@@ -53,6 +53,7 @@ export function route(options: any): Rule {
       componentPath: options.path,
     };
     rules.push(updateRoutes(updateRoutesOptions));
+    rules.push(insertImportToModule(updateRoutesOptions));
 
     return chain(rules)(tree, context);
   };
