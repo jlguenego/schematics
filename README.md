@@ -19,7 +19,23 @@ Create a routing module.
 1. Find the module A where to create the route.
 2. Create the routing module B if not already present.
 3. Create the route component and declare it in the module A.
-4. Create the route with the path specified with `--url` options in the routing module B.
+4. Create the route with the path specified in the routing module B.
+
+Example:
+
+```
+ng g route hello world
+```
+
+Create the HomeComponent in the AppModule.
+Configure the route as:
+
+```
+const routes: Routes = [
+    // ...
+    { path: "world", component: HelloComponent }
+];
+```
 
 ### page
 
