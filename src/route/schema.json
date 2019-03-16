@@ -5,10 +5,6 @@
     "type": "object",
     "description": "Create a new component and add it as a route in a routing module",
     "properties": {
-      "url": {
-        "type": "string",
-        "description": "The url (path) to connect the route",
-      },
       "path": {
         "type": "string",
         "format": "path",
@@ -30,10 +26,20 @@
           "index": 0
         },
         "x-prompt": "What name would you like to use for the component?"
+      },
+      "url": {
+        "type": "string",
+        "description": "The url (path) to connect the route",
+        "$default": {
+          "$source": "argv",
+          "index": 1
+        },
+        "x-prompt": "What name would you like to use for route url path?"
       }
     },
     "required": [
-      "name"
+      "name",
+      "url",
     ]
   }
   

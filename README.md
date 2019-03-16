@@ -1,28 +1,75 @@
-# Getting Started With Schematics
+# What is it?
 
-This repository is a basic Schematic implementation that serves as a starting point to create and publish Schematics to NPM.
+A collection of schematics that extends the default one.
 
-### Testing
+I did it for making simpler my daily work with Angular.
+Its only purpose is to improve DX.
 
-To test locally, install `@angular-devkit/schematics-cli` globally and use the `schematics` command line tool. That tool acts the same as the `generate` command of the Angular CLI, but also has a debug mode.
+## Schematics
 
-Check the documentation with
-```bash
-schematics --help
+### routing
+
+Create a routing module.
+
+1. Create a module if it does not exist.
+2. Create the associated routing module.
+
+### route
+
+1. Find the module A where to create the route.
+2. Create the routing module B if not already present.
+3. Create the route component and declare it in the module A.
+4. Create the route with the path specified with `--url` options in the routing module B.
+
+### page
+
+1. Create a component with suffix `PageComponent`.
+2. Declare it inside a module in `entryComponents` section.
+
+Options are same as the @schematics/angular component.
+
+# Getting Started 
+
+```
+ng new my-project
+cd my-project
+npm i @jlguenego/schematics
 ```
 
-### Unit Testing
+Edit `angular.json`, and add 
 
-`npm run test` will run the unit tests, using Jasmine as a runner and test framework.
-
-### Publishing
-
-To publish, simply do:
-
-```bash
-npm run build
-npm publish
+```
+{ 
+    // rest of the file
+    "cli": {
+        "defaultCollection": "@jlguenego/schematics"
+    }
+}
 ```
 
-That's it!
+Done!
+
+
+
+### Using schematics
+
+Create a routing module `hello`.
+```
+ng g routing hello
+```
+
+Create a route `home`
+```
+ng g route hello/home ""
+```
+
+Create a page `success`
+
+```
+ng g page hello/success
+```
+
+# Author
+
+Jean-Louis GUENEGO <jlguenego@gmail.com> - 2019.
  
