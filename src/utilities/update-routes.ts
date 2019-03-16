@@ -3,7 +3,7 @@ import { readIntoSourceFile } from "./common";
 import { InsertChange, Change } from "@schematics/angular/utility/change";
 import * as ts from 'typescript';
 import { normalize, strings } from "@angular-devkit/core";
-import { findNode, addImportToModule } from "@schematics/angular/utility/ast-utils";
+import { findNode, insertImport } from "@schematics/angular/utility/ast-utils";
 import { buildRelativePath } from "@schematics/angular/utility/find-module";
 
 function getUpdateRoutesChanges(source: ts.SourceFile, options: UpdateRoutesOptions): Change[] {
@@ -68,18 +68,18 @@ export function insertImportToModule(options: UpdateRoutesOptions): Rule {
         const component = strings.classify(options.componentName) + 'Component';
         const componentPath = normalize(options.componentPath + '/' + options.componentName + '/' + options.componentName + '.component');
         const relativePath = buildRelativePath(routingModulePath, componentPath);
-        const changes = addImportToModule(
+        const change = insertImport(
             source,
             routingModulePath,
             component,
             relativePath);
         const recorder = tree.beginUpdate(routingModulePath);
 
-        for (let change of changes) {
-            if (change instanceof InsertChange) {
-                recorder.insertLeft(change.pos, change.toAdd);
-            }
+
+        if (change instanceof InsertChange) {
+            recorder.insertLeft(change.pos, change.toAdd);
         }
+
         tree.commitUpdate(recorder);
         return tree;
     };
